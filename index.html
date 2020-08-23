@@ -1,9 +1,13 @@
-<!DOCTYPE html>
+---
+title: Home
+---
+<!doctype html>
 <html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+  </head>
+  <body>
+    <h1>{{ "Hello World!" | downcase }}</h1>
+  </body>
 </html>
