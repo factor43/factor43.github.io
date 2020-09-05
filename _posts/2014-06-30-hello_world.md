@@ -1,6 +1,7 @@
 ---
 layout: post
 author: sjl
+title: Hello World!
 ---
 Like many software developers, I’m always working on side projects. Or I’m thinking about the next potential side project. Most of them never see the light of day, either abandoned or somewhat “finished” and then forgotten. Sometimes I realize the initial idea wasn’t quite as cool as I thought it was. Or sometimes I’m only developing that project (be it tool, demo or algorithm) as a learning experience anyway, never intending it to be a finished product.
 
