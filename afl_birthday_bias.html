@@ -3,6 +3,152 @@ layout: default
 title: AFL birthday bias
 
 ---
+<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 <p>Malcolm Gladwell describes in <a href="http://www.amazon.com/gp/product/0316017930/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0316017930&amp;linkCode=as2&amp;tag=thenapbun-20&amp;linkId=NTQJPPMN5TKLYFWS"><span style="text-decoration: underline;">Outliers: The Story of Success</span></a> how players born in the first few months of the year can have an advantage over those born in later months. The reason for this is&nbsp;that junior level competitions often have uniform cut-off&nbsp;dates (e.g. under 16 at January 1st), and being a few months older than other players can provide&nbsp;a big advantage. That is, being bigger, faster and stronger can lead to a positive feedback loop. &nbsp;A slightly older player is more likely to be chosen for representative teams, get better coaching, encouragement and opportunities etc. which is more likely to&nbsp;lead&nbsp;them to ultimately play at the highest level. This is an example of what is sometimes referred to as a “path dependent outcome”.</p>
 <p>According to Gladwell, for various reasons this pattern is noticeable for some sports more than others, for instance hockey and baseball more so than (American) football and basketball. I wanted to quickly check if there was any birthday bias for Australian Rules AFL players, so I wrote a small python script to gather all 2014 AFL player birth dates and created the following chart showing the&nbsp;number of players born in each week of the year:</p>
-  
+<div class="wpd3-152-0"><script type="text/javascript">var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  width = 850 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+var x = d3.scale.ordinal()
+  .rangeRoundBands([0, width], .1);
+var y = d3.scale.linear()
+  .range([height, 0]);
+var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom");
+var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left")
+  .ticks(10, "");
+var svg = d3.select(".wpd3-152-0").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+d3.tsv("/projects/afl/birthdays/birthdays_by_week_2014.tsv", type, function(error, data) {
+x.domain(data.map(function(d) { return d.week; }));
+y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+  .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Frequency");
+svg.selectAll(".bar")
+    .data(data)
+  .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x(d.week); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d.frequency); })
+    .attr("height", function(d) { return height - y(d.frequency); });
+});
+function type(d) {
+d.frequency = +d.frequency;
+return d;
+}
+</script></div>
+<p>There may be some hint of a bias here, but it’s not immediately obvious. And if there is a bias, it’s nowhere near as strong as the examples given by Gladwell. However, what happens when we group birth dates by quarter?</p>
+<p></p><center><p></p>
+<div class="wpd3-152-2"><script type="text/javascript">var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  widthSml = 350 - margin.left - margin.right,
+  heightSml = 250 - margin.top - margin.bottom;
+var x2 = d3.scale.ordinal()
+  .rangeRoundBands([0, widthSml], .1);
+var y2 = d3.scale.linear()
+  .range([heightSml, 0]);
+var xAxis2 = d3.svg.axis()
+  .scale(x2)
+  .orient("bottom");
+var yAxis2 = d3.svg.axis()
+  .scale(y2)
+  .orient("left")
+  .ticks(10, "");
+var svg2 = d3.select(".wpd3-152-2").append("svg")
+  .attr("width", widthSml + margin.left + margin.right)
+  .attr("height", heightSml + margin.top + margin.bottom)
+.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+d3.tsv("/projects/afl/birthdays/birthdays_by_quarter_2014.tsv", type, function(error, data) {
+x2.domain(data.map(function(d) { return d.quarter; }));
+y2.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+svg2.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + heightSml + ")")
+    .call(xAxis2);
+svg2.append("g")
+    .attr("class", "y axis")
+    .call(yAxis2)
+svg2.selectAll(".bar")
+    .data(data)
+  .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x2(d.quarter); })
+    .attr("width", x2.rangeBand())
+    .attr("y", function(d) { return y2(d.frequency); })
+    .attr("height", function(d) { return heightSml - y2(d.frequency); });
+});
+function type(d) {
+d.frequency = +d.frequency;
+return d;
+}
+</script></div>
+<p></p></center>Clearly,&nbsp;more professional AFL players are born towards the earlier part of the year. In fact there are 60&nbsp;more players born in the first quarter of the year than the last, and 56% are born in the first 6 months.<p></p>
+<p>But how does this distribution compare to that of the general population? i.e. is it even reasonable to assume that the&nbsp;distribution of birthdays should be uniform? As it turns out, not exactly – but it <em>is</em>&nbsp;much closer to&nbsp;uniform that this, which suggests that there is in fact some&nbsp;sort of bias at work, perhaps in the process that&nbsp;AFL&nbsp;players go through as they develop.</p>
+<p>If we do make the assumption that the distribution of birthdays for all potential players is in fact perfectly uniform, it means that on average, 50%&nbsp;of the 655 players would be born in the first half of the year&nbsp;&nbsp;(with a standard deviation of 12.8). This also means the probability&nbsp;of getting so many&nbsp;players (368) born in the first half of the year if there was no bias, is about 1 in 1289.</p>
+<p>Finally, given this was all started by a book called “Outliers”, I thought it would be appropriate to show the&nbsp;distribution of ages of all 2014 players (with age being computed at mid-season). The outlier&nbsp;on the far right is of course <a href="http://en.wikipedia.org/wiki/Dustin_Fletcher"><span style="text-decoration: underline;">Dustin Fletcher</span></a>&nbsp;at 39 years.</p>
+<div class="wpd3-152-1"><script type="text/javascript">var margin = {top: 20, right: 20, bottom: 30, left: 40},
+  width1 = 880 - margin.left - margin.right,
+  height1 = 400 - margin.top - margin.bottom;
+var x1 = d3.scale.ordinal()
+  .rangeRoundBands([0, width1], .1);
+var y1 = d3.scale.linear()
+  .range([height1, 0]);
+var xAxis1 = d3.svg.axis()
+  .scale(x1)
+  .orient("bottom");
+var yAxis1 = d3.svg.axis()
+  .scale(y1)
+  .orient("left")
+  .ticks(10, "");
+var svg1 = d3.select(".wpd3-152-1").append("svg")
+  .attr("width", width1 + margin.left + margin.right)
+  .attr("height", height1 + margin.top + margin.bottom)
+.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+d3.tsv("/projects/afl/birthdays/ages_by_years_2014.tsv", type, function(error, data) {
+x1.domain(data.map(function(d) { return d.age; }));
+y1.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+svg1.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height1 + ")")
+    .call(xAxis1);
+svg1.append("g")
+    .attr("class", "y axis")
+    .call(yAxis1)
+  .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Frequency");
+svg1.selectAll(".bar")
+    .data(data)
+  .enter().append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return x1(d.age); })
+    .attr("width", x1.rangeBand())
+    .attr("y", function(d) { return y1(d.frequency); })
+    .attr("height", function(d) { return height1 - y1(d.frequency); });
+});
+function type(d) {
+d.frequency = +d.frequency;
+return d;
+}</script></div>
