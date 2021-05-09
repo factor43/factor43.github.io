@@ -8,7 +8,7 @@ A project I’ve been working on recently is a bit of a beast. It has a pretty l
 
 There are reasons for this of course, as there always is. Commercial pressures to continually release significant new updates with more features and content takes precedent over any type of refactoring or other maintenance.
 
-But while the codebase is a little rough around the edges, the actual finished product is loved by a huger number of players, making it more successful than anything else I’ve worked on.
+But while the codebase is a little rough around the edges, the actual finished product is loved by a huge number of players, making it more successful than anything else I’ve worked on.
 
 This troubles me. It seems a little… unjust. Shouldn’t great code mean a great product? And shouldn’t poor code result is a sub-par product? Clearly, not always.
 
